@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 //import portfolioRoutes from './routes/portfolioRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js'; 
 import tokenRoutes from './routes/tokenRoutes.js';
-
+import userRoutes from './routes/userRoutes.js';
 dotenv.config();
 
 const app = express();
@@ -24,6 +24,7 @@ mongoose.connect("mongodb+srv://cpcollective:rgr77MrNm4bf6gpL@cluster0.cd1if.mon
 //app.use('/api/portfolio', portfolioRoutes);
 app.use('/api/token', tokenRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/users', userRoutes);
 // Production environment setup
 if (process.env.NODE_ENV === 'production') {
   const __filename = fileURLToPath(import.meta.url);

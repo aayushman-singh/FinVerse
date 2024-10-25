@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const Header = () => {
+const Header = ({ user, onLogout }) => {
   return (
     <header className="sticky top-0 z-50 bg-background border-b border-border/40 shadow-sm">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -13,13 +13,22 @@ const Header = () => {
         </div>
         <nav className="hidden md:flex space-x-4">
           <Link to="/chatbot" className="text-sm hover:text-primary transition-colors">Chatbot</Link>
-          <Link to="#pricing" className="text-sm hover:text-primary transition-colors">Portfolio</Link>
+          <Link to="#portfolio" className="text-sm hover:text-primary transition-colors">Portfolio</Link>
           <Link to="#about" className="text-sm hover:text-primary transition-colors">About</Link>
           <Link to="/addfunds" className="text-sm hover:text-primary transition-colors">Add Funds</Link>
         </nav>
         <div className="flex items-center space-x-2">
-          <Button variant="ghost" size="sm">Log in</Button>
-          <Button size="sm">Sign up</Button>
+          {user ? (
+            <>
+              <span className="text-sm text-primary">{user.name}</span>
+              <Button variant="ghost" size="sm" onClick={onLogout}>Logout</Button>
+            </>
+          ) : (
+            <>
+              <Link to="/login"><Button variant="ghost" size="sm">Log in</Button></Link>
+              <Link to="/signup"><Button size="sm">Sign up</Button></Link>
+            </>
+          )}
         </div>
       </div>
     </header>
