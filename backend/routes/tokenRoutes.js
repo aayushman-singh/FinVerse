@@ -1,4 +1,3 @@
-// routes/tokenRoutes.js
 import express from 'express';
 import { getTokenPrice } from '../services/moralisService.js';
 
