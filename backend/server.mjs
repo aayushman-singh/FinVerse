@@ -12,7 +12,7 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:5177' }));
 app.use(express.json());
 
 // MongoDB connection
@@ -24,7 +24,14 @@ mongoose.connect("mongodb+srv://cpcollective:rgr77MrNm4bf6gpL@cluster0.cd1if.mon
 //app.use('/api/portfolio', portfolioRoutes);
 app.use('/api/token', tokenRoutes);
 app.use('/api/payments', paymentRoutes);
+<<<<<<< HEAD
 app.use('/api/users', userRoutes);
+=======
+
+app.get('/', (req, res) => {
+  res.send('API is running');
+});
+>>>>>>> 32290923c03f99533617df493d1b98cb62361c7d
 // Production environment setup
 if (process.env.NODE_ENV === 'production') {
   const __filename = fileURLToPath(import.meta.url);
@@ -37,7 +44,7 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-const PORT = process.env.PORT || 5003;
+const PORT = 5005;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
