@@ -3,39 +3,39 @@ import Crypto from 'crypto';
 
 const razor = createRazorpayInstance();
 
-// Create Order Function
-export async function createOrder(req, res) {
-  const { orderID, amount } = req.body;
+import axios from 'axios';
 
-  const options = {
-    amount: amount * 100, // Razorpay expects amount in paise
-    currency: 'INR',
-    receipt: orderID || 'receipt1', // Use provided orderID or default
-  };
+export async function createRazorpayOrder(req, res) {
+  const { amount } = req.body;
 
   try {
-    razor.orders.create(options, (err, order) => {
-      if (err) {
-        return res.status(500).json({
-          success: false,
-          message: 'Something went wrong with order creation',
-          error: err.message
-        });
+    const response = await axios.post('https://api.razorpay.com/v1/orders', {
+      amount: amount * 100, // Convert to paise
+      currency: 'INR',
+      receipt: 'receipt#1',
+      notes: {
+        key1: 'value3',
+        key2: 'value2'
       }
-      // Order created successfully
-      return res.status(200).json({
-        success: true,
-        order
-      });
+    }, {
+      auth: {
+        username: 'rzp_test_K8YGIkTVlssWWW', // Replace with your test key
+        password: 'edFxKbzv2LcZcWLLdR4lk6uy' // Replace with your secret key
+      },
+      headers: {
+        'Content-Type': 'application/json'
+      }
     });
+
+    // Send back the order data from Razorpay
+    res.status(200).json(response.data);
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Internal Server Error',
-      error: error.message
-    });
+    console.error("Error creating Razorpay order:", error);
+    res.status(500).json({ success: false, message: 'Failed to create Razorpay order' });
   }
 }
+
+  
 
 // Verify Payment Function
 export async function verifyPayment(req, res) {

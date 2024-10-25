@@ -5,6 +5,7 @@
     "tailwindcss": "^3.4.14"
   },
   "dependencies": {
+    "moralis": "^2.27.2",
     "socket.io-client": "^4.8.1"
   }
 }
