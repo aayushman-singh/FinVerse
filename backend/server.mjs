@@ -20,11 +20,7 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 
 // API routes
 app.use('/api/portfolio', portfolioRoutes);
-var instance = new Razorpay({
-  key_id: R,
-  key_secret: 'YOUR_KEY_SECRET',
-});
-
+app.use('/api/payments', paymentRoutes);
 // Production environment setup
 if (process.env.NODE_ENV === 'production') {
   const __filename = fileURLToPath(import.meta.url);
