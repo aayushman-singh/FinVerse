@@ -3,10 +3,10 @@ import { getTokenPrice } from '../services/moralisService.js';
 
 const router = express.Router();
 
-router.get('/price/:symbol', async (req, res) => {
-  const { symbol } = req.params;
+router.get('/price/:address', async (req, res) => {
+  const { address } = req.params;
   try {
-    const priceData = await getTokenPrice(symbol);
+    const priceData = await getTokenPrice(address);
     res.status(200).json({ success: true, priceData });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

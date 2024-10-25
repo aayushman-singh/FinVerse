@@ -13,7 +13,7 @@ const Header = () => {
         </div>
         <nav className="hidden md:flex space-x-4">
           <Link to="/chatbot" className="text-sm hover:text-primary transition-colors">Chatbot</Link>
-          <Link to="#pricing" className="text-sm hover:text-primary transition-colors">Portfolio</Link>
+          <Link to="/portfolio" className="text-sm hover:text-primary transition-colors">Portfolio</Link>
           <Link to="#about" className="text-sm hover:text-primary transition-colors">About</Link>
           <Link to="/addfunds" className="text-sm hover:text-primary transition-colors">Add Funds</Link>
         </nav>
