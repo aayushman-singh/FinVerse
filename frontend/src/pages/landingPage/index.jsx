@@ -8,30 +8,10 @@ import { Link } from "react-router-dom"; // Import Link from react-router-dom
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
-      {/* Colorful top banner */}
-      <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white text-center py-2 px-4 text-sm">
-        Introducing TradePro Pro - Advanced trading tools and real-time market data at your fingertips.
-      </div>
+     
+    
 
-      {/* Fixed navbar */}
-      <header className="sticky top-0 z-50 bg-background border-b border-border/40 shadow-sm">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Zap className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">FinVerse</span>
-          </div>
-          <nav className="hidden md:flex space-x-4">
-            <Link to="#features" className="text-sm hover:text-primary transition-colors">Chatbot</Link>
-            <Link to="#pricing" className="text-sm hover:text-primary transition-colors">Portfolio</Link>
-            <Link to="#about" className="text-sm hover:text-primary transition-colors">About</Link>
-            <Link to="/addfunds" className="text-sm hover:text-primary transition-colors">Add funds</Link>
-          </nav>
-          <div className="flex items-center space-x-2">
-            <Button variant="ghost" size="sm">Log in</Button>
-            <Button size="sm">Sign up</Button>
-          </div>
-        </div>
-      </header>
+    
 
       <main>
         {/* Content sections */}
