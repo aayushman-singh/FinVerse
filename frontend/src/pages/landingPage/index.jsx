@@ -24,6 +24,7 @@ export default function LandingPage() {
             <Link to="#features" className="text-sm hover:text-primary transition-colors">Chatbot</Link>
             <Link to="#pricing" className="text-sm hover:text-primary transition-colors">Portfolio</Link>
             <Link to="#about" className="text-sm hover:text-primary transition-colors">About</Link>
+            <Link to="/addfunds" className="text-sm hover:text-primary transition-colors">Add funds</Link>
           </nav>
           <div className="flex items-center space-x-2">
             <Button variant="ghost" size="sm">Log in</Button>
