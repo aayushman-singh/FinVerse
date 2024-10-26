@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FaCloudUploadAlt } from 'react-icons/fa'; // Importing cloud icon
 
 const TOKENS = {
   usdt: { name: "USDT", address: "0xdac17f958d2ee523a2206206994597c13d831ec7" },
@@ -7,7 +8,7 @@ const TOKENS = {
   matic: { name: "MATIC", address: "0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0" },
 };
 
-const Portfolio = () => {
+const Portfolio = ({ userID }) => {
   const [rows, setRows] = useState([{ symbol: "", type: "stock", bought: "", quantity: "" }]);
   const [importOpen, setImportOpen] = useState(false);
 
@@ -54,6 +55,26 @@ const Portfolio = () => {
     } catch (error) {
       console.error("Error sending data to model:", error);
       alert("Failed to send data to model.");
+    }
+  };
+
+  const savePortfolio = async () => {
+    try {
+      const response = await fetch("http://localhost:5003/api/portfolio/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userID, portfolio: rows }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        alert("Portfolio saved successfully!");
+      } else {
+        alert("Failed to save portfolio.");
+      }
+    } catch (error) {
+      console.error("Error saving portfolio:", error);
+      alert("An error occurred while saving the portfolio.");
     }
   };
 
@@ -132,11 +153,14 @@ const Portfolio = () => {
         <button onClick={addRow} style={{ ...buttonStyle, marginTop: "10px" }}>Add Row</button>
       </div>
 
-      {/* Export Buttons */}
-      <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+      {/* Export and Save Buttons */}
+      <div style={{ marginTop: "20px", display: "flex", gap: "10px", alignItems: "center" }}>
         <button onClick={exportToCSV} style={buttonStyle}>Export to CSV</button>
         <button onClick={exportToJSON} style={buttonStyle}>Export to JSON</button>
         <button onClick={exportToModel} style={buttonStyle}>Export to Model</button>
+        <button onClick={savePortfolio} style={{ ...buttonStyle, display: "flex", alignItems: "center" }}>
+          <FaCloudUploadAlt style={{ marginRight: "5px" }} /> Save
+        </button>
       </div>
     </div>
   );
@@ -151,6 +175,8 @@ const buttonStyle = {
   border: "none",
   cursor: "pointer",
   fontSize: "0.9rem",
+  display: "flex",
+  alignItems: "center",
 };
 
 const dropdownStyle = {
