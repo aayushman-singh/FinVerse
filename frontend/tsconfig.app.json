@@ -8,12 +8,12 @@
 
     /* Bundler mode */
     "moduleResolution": "NodeNext",
-    "allowImportingTsExtensions": true,
+    "allowImportingTsExtensions": false,
     "isolatedModules": true,
     "moduleDetection": "force",
-    "noEmit": true,
+    "noEmit": false,
     "jsx": "react-jsx",
-
+    "composite": true,
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
