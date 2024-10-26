@@ -46,7 +46,7 @@ const Portfolio = ({ userID }) => {
 
   const exportToModel = async () => {
     try {
-      await fetch("http://localhost/chatbot", {
+      await fetch("http://localhost:5173/chatbot", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ input: rows }),
