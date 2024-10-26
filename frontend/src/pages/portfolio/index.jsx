@@ -8,56 +8,192 @@ const TOKENS = {
 };
 
 const Portfolio = () => {
-  const [selectedToken, setSelectedToken] = useState("");
-  const [priceData, setPriceData] = useState(null);
+  const [rows, setRows] = useState([{ symbol: "", type: "stock", bought: "", quantity: "" }]);
+  const [importOpen, setImportOpen] = useState(false);
 
-  const handleTokenChange = (event) => {
-    setSelectedToken(event.target.value);
+  const handleRowChange = (index, field, value) => {
+    const newRows = [...rows];
+    newRows[index][field] = value;
+    setRows(newRows);
   };
 
-  const fetchTokenPrice = async () => {
-    // Retrieve tokenAddress based on the selected token
-    const tokenAddress = TOKENS[selectedToken]?.address;
-    
-    if (!tokenAddress) {
-      alert("Please select a valid token");
-      return;
-    }
+  const addRow = () => {
+    setRows([...rows, { symbol: "", type: "stock", bought: "", quantity: "" }]);
+  };
 
+  const exportToCSV = () => {
+    const csvContent = rows
+      .map(row => `${row.symbol},${row.type},${row.bought},${row.quantity}`)
+      .join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "portfolio.csv";
+    link.click();
+  };
+
+  const exportToJSON = () => {
+    const jsonContent = JSON.stringify(rows);
+    const blob = new Blob([jsonContent], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "portfolio.json";
+    link.click();
+  };
+
+  const exportToModel = async () => {
     try {
-      const response = await fetch(`http://localhost:5005/api/token/price/${tokenAddress}`);
-      console.log("Raw response:", response);
-  
-      if (!response.ok) throw new Error('Failed to fetch token price');
-      
-      const data = await response.json();
-      console.log("Parsed response:", data);
-      setPriceData(data.priceData);
+      await fetch("http://localhost/chatbot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ input: rows }),
+      });
+      alert("Data sent to model successfully!");
     } catch (error) {
-      console.error("Error fetching token price:", error);
+      console.error("Error sending data to model:", error);
+      alert("Failed to send data to model.");
     }
   };
 
   return (
-    <div>
-      <h1>Select Token to Fetch Price</h1>
-      <select value={selectedToken} onChange={handleTokenChange}>
-        <option value="">Select a token</option>
-        {Object.keys(TOKENS).map((key) => (
-          <option key={key} value={key}>
-            {TOKENS[key].name}
-          </option>
-        ))}
-      </select>
-      <button onClick={fetchTokenPrice}>Get Price</button>
-      {priceData && (
-        <div>
-          <h2>Price Data:</h2>
-          <pre>{JSON.stringify(priceData, null, 2)}</pre>
+    <div style={{ padding: "20px", maxWidth: "800px", margin: "auto" }}>
+      <div style={{ textAlign: "center", marginBottom: "20px" }}>
+        <h1 style={{ fontSize: "2.5rem", color: "#001f3f" }}>Portfolio</h1>
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div style={{ position: "relative" }}>
+          <button onClick={() => setImportOpen(!importOpen)} style={buttonStyle}>Import Profile</button>
+          {importOpen && (
+            <div style={dropdownStyle}>
+              <button onClick={() => alert("Importing from Groww")} style={buttonStyle}>Groww</button>
+              <button onClick={() => alert("Importing from Kite")} style={buttonStyle}>Kite</button>
+            </div>
+          )}
         </div>
-      )}
+      </div>
+
+      {/* Form Table */}
+      <div style={{ overflowX: "auto", marginTop: "20px" }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", background: "white" }}>
+          <thead>
+            <tr>
+              <th style={tableHeaderStyle}>Symbol</th>
+              <th style={tableHeaderStyle}>Type</th>
+              <th style={tableHeaderStyle}>Bought Price</th>
+              <th style={tableHeaderStyle}>Quantity</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, index) => (
+              <tr key={index} style={index % 2 ? rowStyle : altRowStyle}>
+                <td style={cellStyle}>
+                  <input
+                    type="text"
+                    value={row.symbol}
+                    onChange={(e) => handleRowChange(index, "symbol", e.target.value)}
+                    placeholder="e.g., USDT or AAPL"
+                    style={inputStyle}
+                  />
+                </td>
+                <td style={cellStyle}>
+                  <select
+                    value={row.type}
+                    onChange={(e) => handleRowChange(index, "type", e.target.value)}
+                    style={dropdownStyle}
+                  >
+                    <option value="stock">Stock</option>
+                    <option value="token">Token</option>
+                  </select>
+                </td>
+                <td style={cellStyle}>
+                  <input
+                    type="number"
+                    value={row.bought}
+                    onChange={(e) => handleRowChange(index, "bought", e.target.value)}
+                    placeholder="Bought Price"
+                    style={inputStyle}
+                  />
+                </td>
+                <td style={cellStyle}>
+                  <input
+                    type="number"
+                    value={row.quantity}
+                    onChange={(e) => handleRowChange(index, "quantity", e.target.value)}
+                    placeholder="Quantity"
+                    style={inputStyle}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <button onClick={addRow} style={{ ...buttonStyle, marginTop: "10px" }}>Add Row</button>
+      </div>
+
+      {/* Export Buttons */}
+      <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+        <button onClick={exportToCSV} style={buttonStyle}>Export to CSV</button>
+        <button onClick={exportToJSON} style={buttonStyle}>Export to JSON</button>
+        <button onClick={exportToModel} style={buttonStyle}>Export to Model</button>
+      </div>
     </div>
   );
+};
+
+// Styling
+const buttonStyle = {
+  padding: "8px 20px",
+  backgroundColor: "#001f3f",
+  color: "white",
+  borderRadius: "20px",
+  border: "none",
+  cursor: "pointer",
+  fontSize: "0.9rem",
+};
+
+const dropdownStyle = {
+  backgroundColor: "#001f3f",
+  color: "white",
+  padding: "8px 20px",
+  borderRadius: "5px",
+  display: "flex",
+  flexDirection: "column",
+  position: "absolute",
+  top: "100%",
+  right: 0,
+  zIndex: 1,
+  gap: "10px",
+};
+
+const tableHeaderStyle = {
+  fontWeight: "bold",
+  padding: "12px",
+  backgroundColor: "#f2f2f2",
+  borderBottom: "2px solid rgba(0, 0, 0, 0.1)",
+};
+
+const rowStyle = {
+  borderBottom: "1px solid rgba(0, 0, 0, 0.05)",
+};
+
+const altRowStyle = {
+  backgroundColor: "rgba(0, 0, 0, 0.03)",
+  borderBottom: "1px solid rgba(0, 0, 0, 0.05)",
+};
+
+const cellStyle = {
+  padding: "10px",
+  borderBottom: "1px solid rgba(0, 0, 0, 0.05)",
+};
+
+const inputStyle = {
+  width: "100%",
+  padding: "8px",
+  border: "1px solid rgba(0, 0, 0, 0.1)",
+  borderRadius: "5px",
+  backgroundColor: "#f9f9f9",
 };
 
 export default Portfolio;
