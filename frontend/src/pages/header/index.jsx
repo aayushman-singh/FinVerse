@@ -32,7 +32,7 @@ const Header = ({ user, onLogout }) => {
               <Link to="/portfolio" className="text-sm relative group transition-colors hover:text-primary">
                 Portfolio
               </Link>
-              <Link to="#about" className="text-sm relative group transition-colors hover:text-primary">
+              <Link to="/about" className="text-sm relative group transition-colors hover:text-primary">
                 About
               </Link>
               <Link to="/addfunds" className="text-sm relative group transition-colors hover:text-primary">
@@ -50,9 +50,9 @@ const Header = ({ user, onLogout }) => {
               <a href="#connect" onClick={(e) => handleScroll(e, 'connect')} className="text-sm relative group transition-colors hover:text-primary">
                 Connect
               </a>
-              <a href="#about" onClick={(e) => handleScroll(e, 'about')} className="text-sm relative group transition-colors hover:text-primary">
+              <Link to="/about" className="text-sm relative group transition-colors hover:text-primary">
                 About
-              </a>
+              </Link>
             </>
           )}
         </nav>

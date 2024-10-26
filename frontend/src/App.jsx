@@ -7,6 +7,7 @@ import Header from './pages/header';
 import Portfolio from './pages/portfolio';
 import Login from './pages/login';
 import Signup from './pages/signup';
+import About from './pages/about';
 
 const App = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("userInfo")));
@@ -39,6 +40,7 @@ const App = () => {
           <Route path='/chatbot' element={<Chatbot />} />
           <Route path='/login' element={<Login onLogin={handleLogin} />} />
           <Route path='/signup' element={<Signup onLogin={handleLogin} />} />
+          <Route path='/about' element={<About />} />
         </Routes>
       </div>
     </Router>
