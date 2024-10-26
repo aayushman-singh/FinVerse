@@ -139,7 +139,7 @@ const Chatbot = () => {
                 >
                   <CardHeader>
                     <CardTitle className={`text-${msg.sender === "user" ? "blue-600" : "gray-600"} font-semibold`}>
-                      {msg.sender === "user" ? "You" : "TradePro Pro"}
+                      {msg.sender === "user" ? "You" : "FinVerse.ai"}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>

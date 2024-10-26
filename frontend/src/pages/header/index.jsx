@@ -4,37 +4,59 @@ import { LineChart } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Header = ({ user, onLogout }) => {
+  const handleScroll = (e, id) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <header className="sticky top-0 z-50 bg-background border-b border-border/40 shadow-sm">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <LineChart className="h-6 w-6 text-[#1D4ED8]" /> {/* Navy blue color for financial theme */}
+          <LineChart className="h-6 w-6 text-[#1D4ED8]" />
           <Link to="/" className="text-xl font-bold">FinVerse</Link>
         </div>
         
         <nav className="hidden md:flex space-x-4">
-          <Link to="/" className="text-sm relative group transition-colors hover:text-primary">
-            Home
-            <span className="absolute left-0 bottom-0 w-full h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
-          </Link>
-          <Link to="/chatbot" className="text-sm relative group transition-colors hover:text-primary">
-            Chatbot
-            <span className="absolute left-0 bottom-0 w-full h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
-          </Link>
-          <Link to="/portfolio" className="text-sm relative group transition-colors hover:text-primary">
-            Portfolio
-            <span className="absolute left-0 bottom-0 w-full h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
-          </Link>
-          <Link to="#about" className="text-sm relative group transition-colors hover:text-primary">
-            About
-            <span className="absolute left-0 bottom-0 w-full h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
-          </Link>
-          <Link to="/addfunds" className="text-sm relative group transition-colors hover:text-primary">
-            Add Funds
-            <span className="absolute left-0 bottom-0 w-full h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
-          </Link>
+          {user ? (
+            <>
+              <Link to="/" className="text-sm relative group transition-colors hover:text-primary">
+                Home
+              </Link>
+              <Link to="/chatbot" className="text-sm relative group transition-colors hover:text-primary">
+                Chatbot
+              </Link>
+              <Link to="/portfolio" className="text-sm relative group transition-colors hover:text-primary">
+                Portfolio
+              </Link>
+              <Link to="#about" className="text-sm relative group transition-colors hover:text-primary">
+                About
+              </Link>
+              <Link to="/addfunds" className="text-sm relative group transition-colors hover:text-primary">
+                Add Funds
+              </Link>
+            </>
+          ) : (
+            <>
+              <a href="#home" onClick={(e) => handleScroll(e, 'home')} className="text-sm relative group transition-colors hover:text-primary">
+                Home
+              </a>
+              <a href="#features" onClick={(e) => handleScroll(e, 'features')} className="text-sm relative group transition-colors hover:text-primary">
+                Features
+              </a>
+              <a href="#connect" onClick={(e) => handleScroll(e, 'connect')} className="text-sm relative group transition-colors hover:text-primary">
+                Connect
+              </a>
+              <a href="#about" onClick={(e) => handleScroll(e, 'about')} className="text-sm relative group transition-colors hover:text-primary">
+                About
+              </a>
+            </>
+          )}
         </nav>
-        
+
         <div className="flex items-center space-x-4">
           {user ? (
             <>
