@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChevronRight } from "lucide-react";
-import axios from 'axios';
+import { ChevronRight, Paperclip } from "lucide-react";
+import axios from "axios";
 
-const apiKey = "l0rMwHVqEnhXh7UBaDPKsiu0FuwiRzcr"; // API key
+const apiKey = "l0rMwHVqEnhXh7UBaDPKsiu0FuwiRzcr";
 const endpointId = 'predefined-openai-gpt4turbo';
 
 const Chatbot = () => {
@@ -43,9 +43,8 @@ const Chatbot = () => {
     try {
       if (!sessionId) throw new Error("Session ID is not available");
 
-      // Call submitQuery to get the chatbot response
       const chatbotMessage = await submitQuery(sessionId, message);
-      console.log("Chatbot Answer:", chatbotMessage); // Log the answer field
+      console.log("Chatbot Answer:", chatbotMessage);
 
       setConversation([
         ...newConversation,
@@ -59,7 +58,6 @@ const Chatbot = () => {
     }
   };
 
-  // Function to create a chat session
   async function createChatSession(externalUserId) {
     try {
       const response = await axios.post('https://api.on-demand.io/chat/v1/sessions', {
@@ -86,7 +84,6 @@ const Chatbot = () => {
     }
   }
 
-  // Function to submit a query using the session ID
   async function submitQuery(sessionId, query) {
     try {
       const response = await axios.post(`https://api.on-demand.io/chat/v1/sessions/${sessionId}/query`, {
@@ -109,8 +106,8 @@ const Chatbot = () => {
       });
 
       if (response.data && response.data.data && response.data.data.answer) {
-        console.log("Response Structure:", response.data); // Log the entire response structure
-        return response.data.data.answer;  // Return only the answer field
+        console.log("Response Structure:", response.data);
+        return response.data.data.answer;
       } else {
         console.error('Unexpected response structure:', response.data);
         throw new Error('No answer found in query result');
@@ -127,63 +124,35 @@ const Chatbot = () => {
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white text-center py-2 px-4 text-sm">
-        Chat with TradePro Pro
+        Chat with FinVerse.ai
       </div>
 
-      <main>
-        <section className="py-20 bg-background">
-          <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-6xl roboto-black font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
-              Ask TradePro Pro anything
-            </h1>
-            <p className="text-xl mb-8 text-muted-foreground max-w-2xl mx-auto">
-              Get answers to your trading questions and more.
-            </p>
-            <form className="flex max-w-md mx-auto" onSubmit={handleSendMessage}>
-              <Input
-                type="text"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Type your message"
-                className="rounded-l-full rounded-r-none border-r-0"
-              />
-              <Button
-                type="submit"
-                className="rounded-r-full rounded-l-none bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                Send
-                <ChevronRight className="ml-2 h-4 w-4" />
-              </Button>
-            </form>
-            {error && <p className="text-red-500 mt-4">{error}</p>}
-          </div>
-        </section>
-
-        <section className="py-20 bg-background">
-          <div className="container mx-auto px-4 text-center">
+      <main className="flex-1 overflow-y-auto">
+        <section className="py-6 px-4 bg-background">
+          <div className="container mx-auto text-center">
             <h2 className="text-3xl font-bold mb-8">Conversation</h2>
             <div className="flex flex-col space-y-4">
               {conversation.map((msg, index) => (
                 <Card
                   key={index}
-                  className="bg-card hover:bg-card/80 transition-colors duration-300 border-2 border-primary/20"
+                  className={`bg-${msg.sender === "user" ? "blue-50" : "gray-100"} p-4 rounded-lg shadow-md border-l-4 ${msg.sender === "user" ? "border-blue-500" : "border-gray-500"}`}
                 >
                   <CardHeader>
-                    <CardTitle className="flex items-center space-x-2">
-                      <span>{msg.sender === "user" ? "You" : "TradePro Pro"}</span>
+                    <CardTitle className={`text-${msg.sender === "user" ? "blue-600" : "gray-600"} font-semibold`}>
+                      {msg.sender === "user" ? "You" : "TradePro Pro"}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <CardDescription>{msg.message}</CardDescription>
+                    <CardDescription className="text-gray-800 leading-relaxed">
+                      {msg.message}
+                    </CardDescription>
                   </CardContent>
                 </Card>
               ))}
               {loading && (
-                <Card className="bg-card border-2 border-primary/20 animate-bounce">
+                <Card className="bg-gray-100 border-l-4 border-gray-500 animate-pulse p-4 rounded-lg shadow-md">
                   <CardHeader>
-                    <CardTitle className="flex items-center space-x-2">
-                      <span className="typing-indicator">TradePro Pro is typing...</span>
-                    </CardTitle>
+                    <CardTitle className="text-gray-600 font-semibold">FinVerse.ai is typing...</CardTitle>
                   </CardHeader>
                 </Card>
               )}
@@ -192,28 +161,31 @@ const Chatbot = () => {
         </section>
       </main>
 
-      <footer className="border-t py-8 bg-background">
-        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} FinVerse. All rights reserved.
-        </div>
+      <footer className="sticky bottom-0 w-full bg-white border-t p-4">
+        <form className="flex items-center" onSubmit={handleSendMessage}>
+          <Button
+            variant="ghost"
+            className="mr-2 p-2 rounded-full text-gray-500 hover:bg-gray-100"
+            onClick={(e) => e.preventDefault()}
+          >
+            <Paperclip className="h-5 w-5" />
+          </Button>
+          <Input
+            type="text"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Type your message..."
+            className="flex-1 bg-gray-100 px-4 py-2 rounded-l-full"
+          />
+          <Button
+            type="submit"
+            className="rounded-r-full bg-blue-600 hover:bg-blue-700 text-white px-4"
+          >
+            Send
+            <ChevronRight className="ml-2 h-4 w-4" />
+          </Button>
+        </form>
       </footer>
-
-      <style jsx>{`
-        .typing-indicator {
-          animation: fadeBounce 1.5s infinite ease-in-out;
-        }
-
-        @keyframes fadeBounce {
-          0%, 100% {
-            opacity: 0.5;
-            transform: translateY(0);
-          }
-          50% {
-            opacity: 1;
-            transform: translateY(-8px);
-          }
-        }
-      `}</style>
     </div>
   );
 };
