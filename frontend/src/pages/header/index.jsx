@@ -13,16 +13,26 @@ const Header = ({ user, onLogout }) => {
         </div>
         
         <nav className="hidden md:flex space-x-4">
-          {["Home", "Chatbot", "Portfolio", "About", "Add Funds"].map((item, index) => (
-            <Link
-              key={index}
-              to={`/${item.toLowerCase().replace(" ", "")}`}
-              className="text-sm relative group transition-colors hover:text-primary"
-            >
-              {item}
-              <span className="absolute left-0 bottom-0 w-full h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
-            </Link>
-          ))}
+          <Link to="/" className="text-sm relative group transition-colors hover:text-primary">
+            Home
+            <span className="absolute left-0 bottom-0 w-full h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+          </Link>
+          <Link to="/chatbot" className="text-sm relative group transition-colors hover:text-primary">
+            Chatbot
+            <span className="absolute left-0 bottom-0 w-full h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+          </Link>
+          <Link to="/portfolio" className="text-sm relative group transition-colors hover:text-primary">
+            Portfolio
+            <span className="absolute left-0 bottom-0 w-full h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+          </Link>
+          <Link to="#about" className="text-sm relative group transition-colors hover:text-primary">
+            About
+            <span className="absolute left-0 bottom-0 w-full h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+          </Link>
+          <Link to="/addfunds" className="text-sm relative group transition-colors hover:text-primary">
+            Add Funds
+            <span className="absolute left-0 bottom-0 w-full h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+          </Link>
         </nav>
         
         <div className="flex items-center space-x-4">
@@ -42,8 +52,12 @@ const Header = ({ user, onLogout }) => {
             </>
           ) : (
             <>
-              <Link to="/login"><Button variant="ghost" size="sm" className="text-sm">Log in</Button></Link>
-              <Link to="/signup"><Button size="sm" className="text-sm">Sign up</Button></Link>
+              <Link to="/login">
+                <Button variant="ghost" size="sm" className="text-sm">Log in</Button>
+              </Link>
+              <Link to="/signup">
+                <Button size="sm" className="text-sm">Sign up</Button>
+              </Link>
             </>
           )}
         </div>
